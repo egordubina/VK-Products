@@ -10,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
@@ -27,17 +29,12 @@ import ru.egordubina.vkproducts.R
 @Composable
 fun ProductsScreen(
     uiState: ProductsUiState,
+    refreshAction: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
     val scrollAppBarBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-    if (uiState == ProductsUiState.Error)
-        LaunchedEffect(snackBarHostState) {
-            scope.launch {
-                snackBarHostState.showSnackbar(message = "Что-то пошло не так")
-            }
-        }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -62,7 +59,18 @@ fun ProductsScreen(
             label = "",
         ) {
             when (it) {
-                ProductsUiState.Error -> ProductScreenError(innerPadding = innerPadding)
+                ProductsUiState.Error -> {
+                    LaunchedEffect(snackBarHostState) {
+                        scope.launch {
+                            val result = snackBarHostState.showSnackbar(
+                                message = context.getString(R.string.label__error),
+                                actionLabel = context.getString(R.string.label__retry)
+                            )
+                            if (result == SnackbarResult.ActionPerformed) refreshAction()
+                        }
+                    }
+                    ProductScreenError(innerPadding = innerPadding)
+                }
 
                 ProductsUiState.Loading -> ProductScreenLoading(innerPadding = innerPadding)
 

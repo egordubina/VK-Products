@@ -27,7 +27,7 @@ fun VkProductsNavHost(
         composable(VkProductsDestinations.PRODUCTS.name) {
             val vm: ProductsViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsState()
-            ProductsScreen(uiState = uiState)
+            ProductsScreen(uiState = uiState) { vm.refresh() }
         }
         composable(
             "${VkProductsDestinations.DETAIL.name}/{productId}",
