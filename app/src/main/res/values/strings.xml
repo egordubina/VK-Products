@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VK Продукты</string>
+    <string name="label__loading">Загружаем товары...</string>
 </resources>

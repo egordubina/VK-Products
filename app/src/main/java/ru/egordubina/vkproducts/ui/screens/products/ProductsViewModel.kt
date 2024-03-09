@@ -24,6 +24,14 @@ class ProductsViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
+        loadData()
+    }
+
+    fun refresh() {
+        loadData()
+    }
+
+    private fun loadData() {
         job?.cancel()
         _uiState.value = ProductsUiState.Loading
         job = viewModelScope.launch {

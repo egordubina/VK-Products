@@ -2,6 +2,7 @@ package ru.egordubina.vkproducts.ui.screens.products.all
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,22 +11,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.egordubina.vkproducts.ui.screens.products.ProductUi
+import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @Composable
 internal fun ProductsScreenSuccess(
@@ -51,9 +57,9 @@ internal fun ProductsScreenSuccess(
 }
 
 @Composable
-fun ProductCard(productUi: ProductUi, onClick: (ProductUi) -> Unit) {
+fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
     OutlinedCard(
-        onClick = { onClick(productUi) },
+        onClick = { onClick(productUi.id) },
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -90,5 +96,23 @@ fun ProductCard(productUi: ProductUi, onClick: (ProductUi) -> Unit) {
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .padding(bottom = 8.dp),
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Star,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+            Text(
+                text = productUi.rating.toString(),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        }
     }
 }
