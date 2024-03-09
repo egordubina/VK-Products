@@ -84,7 +84,7 @@ fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
             Text(
                 text = productUi.priceWithDiscount.toString(),
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = productUi.price.toString(),
