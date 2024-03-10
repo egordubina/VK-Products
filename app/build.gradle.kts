@@ -21,8 +21,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "API_URL", "\"https://dummyjson.com/products\"")
     }
 
     buildTypes {
@@ -42,7 +40,6 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
-        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -57,6 +54,7 @@ android {
 
 dependencies {
     implementation(project(":domain:products"))
+    implementation(project(":data:products"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -67,6 +65,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.material)
+    implementation(libs.coil)
+    implementation(libs.icons)
+
+    implementation(libs.navigation)
+    implementation(libs.hilt.navigation)
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
+
+    implementation(libs.coroutines.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -75,18 +82,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    debugImplementation(libs.coil)
-    debugImplementation(libs.icons)
-
-    implementation(libs.navigation)
-    implementation(libs.hilt.navigation)
-
-    implementation(libs.ktor)
-    implementation(libs.ktor.cio)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.coroutines.core)
-    implementation(libs.coroutines.android)
-
-    implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
 }

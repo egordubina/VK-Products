@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts
+package ru.egordubina.vkproducts.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

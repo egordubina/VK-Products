@@ -1,8 +1,7 @@
-package ru.egordubina.vkproducts.data.models
+package ru.egordubina.products.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.egordubina.vkproducts.data.models.ProductDTO
 
 @Serializable
 data class ResponseDTO(
