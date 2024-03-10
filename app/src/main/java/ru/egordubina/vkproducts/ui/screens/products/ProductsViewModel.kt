@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.egordubina.vkproducts.domain.usecases.GetProductsUseCase
+import ru.egordubina.products.usecases.GetProductsUseCase
 import ru.egordubina.vkproducts.ui.screens.products.all.ProductsUiState
 import javax.inject.Inject
 

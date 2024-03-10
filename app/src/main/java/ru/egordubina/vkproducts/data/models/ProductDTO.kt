@@ -2,7 +2,7 @@ package ru.egordubina.vkproducts.data.models
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.egordubina.vkproducts.domain.Product
+import ru.egordubina.products.models.Product
 
 @Serializable
 data class ProductDTO(

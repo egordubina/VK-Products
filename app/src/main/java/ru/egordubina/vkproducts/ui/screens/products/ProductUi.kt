@@ -1,6 +1,6 @@
 package ru.egordubina.vkproducts.ui.screens.products
 
-import ru.egordubina.vkproducts.domain.Product
+import ru.egordubina.products.models.Product
 
 data class ProductUi(
     val id: Int,
@@ -30,4 +30,4 @@ fun Product.asUi(): ProductUi = ProductUi(
     category = this.category,
     thumbnail = this.thumbnail,
     images = this.images,
-) 
+)

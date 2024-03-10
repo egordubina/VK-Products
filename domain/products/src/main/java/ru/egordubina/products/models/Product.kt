@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.domain
+package ru.egordubina.products.models
 
 data class Product(
     val id: Int,
