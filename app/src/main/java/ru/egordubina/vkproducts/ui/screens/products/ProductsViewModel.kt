@@ -40,13 +40,13 @@ class ProductsViewModel @Inject constructor(
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = getProductsUseCase.getAllProducts(page)
-                val newData = response.map { it.asUi() }
-                val data = when (val state = _uiState.value) {
-                    is ProductsUiState.Success -> state.products + newData
-                    else -> newData
+                val data = response.map { it.asUi() }
+                val products = when (val state = _uiState.value) {
+                    is ProductsUiState.Success -> state.products + data
+                    else -> data
                 }
                 _uiState.update {
-                    ProductsUiState.Success(data)
+                    ProductsUiState.Success(products)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
