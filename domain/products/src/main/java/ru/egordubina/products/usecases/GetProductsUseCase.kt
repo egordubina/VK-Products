@@ -5,11 +5,12 @@ import ru.egordubina.products.repositories.ProductsRepository
 import javax.inject.Inject
 
 interface GetProductsUseCase {
-    suspend fun getAllProducts(): List<Product>
+    suspend fun getAllProducts(page: Int): List<Product>
 }
 
 class GetProductsUseCaseImpl @Inject constructor(
     private val productsRepository: ProductsRepository
 ) : GetProductsUseCase {
-    override suspend fun getAllProducts(): List<Product> = productsRepository.getAllProducts()
+    override suspend fun getAllProducts(page: Int): List<Product> =
+        productsRepository.getAllProducts(page = page)
 }

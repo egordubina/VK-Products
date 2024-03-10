@@ -13,15 +13,15 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +38,7 @@ import ru.egordubina.vkproducts.ui.screens.products.ProductUi
 internal fun ProductsScreenSuccess(
     products: List<ProductUi>,
     innerPadding: PaddingValues,
+    loadData: (Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -48,8 +49,14 @@ internal fun ProductsScreenSuccess(
             .padding(horizontal = 8.dp)
             .consumeWindowInsets(innerPadding)
     ) {
-        items(products, key = { item -> item.id }) { item ->
+        itemsIndexed(products, key = { index, item -> item.id }) { index, item ->
             ProductCard(productUi = item, onClick = {})
+            // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
+            // занимает адеквантое место. При бОльшем кол-ве, конечноо же нужно кэшировать и выгружать
+            if (index == products.size - 10)
+                LaunchedEffect(key1 = true) {
+                    loadData(products.size / 20 + 1)
+                }
         }
         item {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))

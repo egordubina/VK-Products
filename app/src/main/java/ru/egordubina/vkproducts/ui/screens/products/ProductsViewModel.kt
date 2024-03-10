@@ -3,6 +3,7 @@ package ru.egordubina.vkproducts.ui.screens.products
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,9 @@ import javax.inject.Inject
 class ProductsViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
 ) : ViewModel() {
+    private var _products: MutableStateFlow<List<ProductUi>> = MutableStateFlow(emptyList())
+    val products: StateFlow<List<ProductUi>> = _products.asStateFlow()
+
     private var _uiState: MutableStateFlow<ProductsUiState> =
         MutableStateFlow(ProductsUiState.Loading)
     val uiState: StateFlow<ProductsUiState> = _uiState.asStateFlow()
@@ -24,20 +28,43 @@ class ProductsViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        loadData()
+        loadData(1)
     }
 
     fun refresh() {
-        loadData()
+        loadData(1)
     }
 
-    private fun loadData() {
+    fun loadNextPage(page: Int) {
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = getProductsUseCase.getAllProducts(page)
+                val newData = response.map { it.asUi() }
+                val data = when (val state = _uiState.value) {
+                    is ProductsUiState.Success -> state.products + newData
+                    else -> newData
+                }
+                _uiState.update {
+                    ProductsUiState.Success(data)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _uiState.update { ProductsUiState.Error }
+            }
+        }
+    }
+
+    private fun loadData(page: Int) {
         job?.cancel()
         _uiState.value = ProductsUiState.Loading
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val products = getProductsUseCase.getAllProducts().map { it.asUi() }
-                _uiState.update { ProductsUiState.Success(products) }
+                val response = getProductsUseCase.getAllProducts(page)
+                val productsUi = response.map { it.asUi() }
+                _uiState.update {
+                    ProductsUiState.Success(products = productsUi)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 _uiState.update { ProductsUiState.Error }

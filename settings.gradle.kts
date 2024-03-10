@@ -23,3 +23,5 @@ rootProject.name = "VkProducts"
 include(":app")
 include(":data:products")
 include(":domain:products")
+include(":data:categories")
+include(":domain:categories")

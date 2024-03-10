@@ -17,7 +17,7 @@ class ProductsApiImpl @Inject constructor(
     private val client: HttpClient,
 ) : ProductsApi {
     override suspend fun loadProducts(page: Int): ResponseDTO {
-        val skip = (page - 1) * 2
+        val skip = (page - 1) * 20
         val response = client.get("$baseUrl?skip=$skip&limit=20").bodyAsText()
         return Json.decodeFromString(response)
     }

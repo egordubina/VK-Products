@@ -30,6 +30,7 @@ import ru.egordubina.vkproducts.R
 fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
+    loadData: (Int) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -54,11 +55,11 @@ fun ProductsScreen(
         modifier = Modifier
             .nestedScroll(scrollAppBarBehavior.nestedScrollConnection)
     ) { innerPadding ->
-        AnimatedContent(
-            targetState = uiState,
-            label = "",
-        ) {
-            when (it) {
+//        AnimatedContent(
+//            targetState = uiState,
+//            label = "",
+//        ) {
+            when (uiState) {
                 ProductsUiState.Error -> {
                     LaunchedEffect(snackBarHostState) {
                         scope.launch {
@@ -77,10 +78,11 @@ fun ProductsScreen(
                 ProductsUiState.Empty -> ProductsScreenEmpty()
 
                 is ProductsUiState.Success -> ProductsScreenSuccess(
-                    products = it.products,
-                    innerPadding = innerPadding
+                    products = uiState.products,
+                    innerPadding = innerPadding,
+                    loadData = { page -> loadData(page) }
                 )
             }
         }
     }
-}
+//}
