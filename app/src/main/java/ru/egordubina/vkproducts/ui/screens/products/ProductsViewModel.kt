@@ -18,9 +18,6 @@ import javax.inject.Inject
 class ProductsViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
 ) : ViewModel() {
-    private var _products: MutableStateFlow<List<ProductUi>> = MutableStateFlow(emptyList())
-    val products: StateFlow<List<ProductUi>> = _products.asStateFlow()
-
     private var _uiState: MutableStateFlow<ProductsUiState> =
         MutableStateFlow(ProductsUiState.Loading)
     val uiState: StateFlow<ProductsUiState> = _uiState.asStateFlow()
