@@ -47,7 +47,6 @@ dependencies {
     implementation(libs.ktor.cio)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coroutines.core)
-    implementation(libs.paging)
 
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
