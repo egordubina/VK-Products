@@ -1,6 +1,5 @@
 package ru.egordubina.vkproducts.ui.screens.products.all
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -30,7 +29,7 @@ import ru.egordubina.vkproducts.R
 fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
-    loadData: (Int) -> Unit
+    loadData: (Int) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -55,34 +54,29 @@ fun ProductsScreen(
         modifier = Modifier
             .nestedScroll(scrollAppBarBehavior.nestedScrollConnection)
     ) { innerPadding ->
-//        AnimatedContent(
-//            targetState = uiState,
-//            label = "",
-//        ) {
-            when (uiState) {
-                ProductsUiState.Error -> {
-                    LaunchedEffect(snackBarHostState) {
-                        scope.launch {
-                            val result = snackBarHostState.showSnackbar(
-                                message = context.getString(R.string.label__error),
-                                actionLabel = context.getString(R.string.label__retry)
-                            )
-                            if (result == SnackbarResult.ActionPerformed) refreshAction()
-                        }
+        when (uiState) {
+            ProductsUiState.Error -> {
+                LaunchedEffect(snackBarHostState) {
+                    scope.launch {
+                        val result = snackBarHostState.showSnackbar(
+                            message = context.getString(R.string.label__error),
+                            actionLabel = context.getString(R.string.label__retry)
+                        )
+                        if (result == SnackbarResult.ActionPerformed) refreshAction()
                     }
-                    ProductScreenError(innerPadding = innerPadding)
                 }
-
-                ProductsUiState.Loading -> ProductScreenLoading(innerPadding = innerPadding)
-
-                ProductsUiState.Empty -> ProductsScreenEmpty()
-
-                is ProductsUiState.Success -> ProductsScreenSuccess(
-                    products = uiState.products,
-                    innerPadding = innerPadding,
-                    loadData = { page -> loadData(page) }
-                )
+                ProductScreenError(innerPadding = innerPadding)
             }
+
+            ProductsUiState.Loading -> ProductScreenLoading(innerPadding = innerPadding)
+
+            ProductsUiState.Empty -> ProductsScreenEmpty()
+
+            is ProductsUiState.Success -> ProductsScreenSuccess(
+                products = uiState.products,
+                innerPadding = innerPadding,
+                loadData = { page -> loadData(page) }
+            )
         }
     }
-//}
+}
