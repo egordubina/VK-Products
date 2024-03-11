@@ -1,6 +1,5 @@
 package ru.egordubina.vkproducts.ui.navigation
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,7 +37,7 @@ fun VkProductsNavHost(
                 uiState = uiState,
                 refreshAction = { vm.refresh() },
                 loadData = { vm.loadNextPage(it, CategoryType.ALL.query) },
-                navigateToCategories = {
+                onCategoriesButtonClick = {
                     navController.navigate("${VkProductsDestinations.CATEGORIES.name}?category=${it.query}")
                 },
                 clearSelectedCategory = {
@@ -46,7 +45,7 @@ fun VkProductsNavHost(
                 },
                 onItemClick = {
                     navController.navigate("${VkProductsDestinations.DETAIL.name}/$it")
-                }
+                },
             )
         }
         composable(
@@ -67,7 +66,11 @@ fun VkProductsNavHost(
             CategoriesScreen(
                 selectedCategory = CategoryType[it.arguments?.getString("category") ?: ""] ?: CategoryType.ALL,
                 onCategoryClick = {
-                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=${it.query}")
+                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=${it.query}") {
+                        popUpTo("${VkProductsDestinations.PRODUCTS.name}?category={category}") {
+                            inclusive = true
+                        }
+                    }
                 },
                 onBackButtonClick = { navController.popBackStack() }
             )

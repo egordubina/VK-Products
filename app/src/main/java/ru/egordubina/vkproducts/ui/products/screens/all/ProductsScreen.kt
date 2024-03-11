@@ -1,5 +1,6 @@
 package ru.egordubina.vkproducts.ui.products.screens.all
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -37,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.categories.CategoryType
-import ru.egordubina.vkproducts.ui.products.ProductUi
-import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
 import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateParameterProvider
 import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
@@ -48,7 +47,7 @@ fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
     loadData: (Int) -> Unit,
-    navigateToCategories: (CategoryType) -> Unit,
+    onCategoriesButtonClick: (CategoryType) -> Unit,
     clearSelectedCategory: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -63,7 +62,7 @@ fun ProductsScreen(
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
                     actions = {
-                        IconButton(onClick = { navigateToCategories(if (uiState is ProductsUiState.Success) uiState.selectedCategory else CategoryType.ALL) }) {
+                        IconButton(onClick = { onCategoriesButtonClick(if (uiState is ProductsUiState.Success) uiState.selectedCategory else CategoryType.ALL) }) {
                             Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
                         }
                     },
@@ -87,7 +86,7 @@ fun ProductsScreen(
                                 selected = uiState.selectedCategory != CategoryType.ALL,
                                 onClick = {
                                     if (uiState.selectedCategory == CategoryType.ALL)
-                                        navigateToCategories(uiState.selectedCategory)
+                                        onCategoriesButtonClick(uiState.selectedCategory)
                                 },
                                 label = {
                                     Text(
@@ -134,12 +133,17 @@ fun ProductsScreen(
 
             ProductsUiState.Empty -> ProductsScreenEmpty()
 
-            is ProductsUiState.Success -> ProductsScreenSuccess(
-                products = uiState.products,
-                innerPadding = innerPadding,
-                loadData = { page -> loadData(page) },
-                onItemClick = { onItemClick(it) },
-            )
+            is ProductsUiState.Success -> {
+                BackHandler(uiState.selectedCategory != CategoryType.ALL) {
+                    clearSelectedCategory()
+                }
+                ProductsScreenSuccess(
+                    products = uiState.products,
+                    innerPadding = innerPadding,
+                    loadData = { page -> loadData(page) },
+                    onItemClick = { onItemClick(it) },
+                )
+            }
         }
     }
 }
@@ -154,7 +158,7 @@ fun ProductsScreenSuccessPreview(
             uiState = uiState,
             refreshAction = {},
             loadData = {},
-            navigateToCategories = {},
+            onCategoriesButtonClick = {},
             clearSelectedCategory = {},
             onItemClick = {},
         )
