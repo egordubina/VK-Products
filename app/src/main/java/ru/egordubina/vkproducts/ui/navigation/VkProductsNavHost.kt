@@ -41,7 +41,11 @@ fun VkProductsNavHost(
                     navController.navigate("${VkProductsDestinations.CATEGORIES.name}?category=${it.query}")
                 },
                 clearSelectedCategory = {
-                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=\"\"")
+                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category={category}") {
+                        popUpTo("${VkProductsDestinations.PRODUCTS.name}?category={category}") {
+                            inclusive = true
+                        }
+                    }
                 },
                 onItemClick = {
                     navController.navigate("${VkProductsDestinations.DETAIL.name}/$it")
@@ -64,7 +68,8 @@ fun VkProductsNavHost(
             arguments = listOf(navArgument("category") { defaultValue = "" })
         ) {
             CategoriesScreen(
-                selectedCategory = CategoryType[it.arguments?.getString("category") ?: ""] ?: CategoryType.ALL,
+                selectedCategory = CategoryType[it.arguments?.getString("category") ?: ""]
+                    ?: CategoryType.ALL,
                 onCategoryClick = {
                     navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=${it.query}") {
                         popUpTo("${VkProductsDestinations.PRODUCTS.name}?category={category}") {
