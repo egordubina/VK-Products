@@ -1,8 +1,6 @@
 package ru.egordubina.vkproducts.ui.categories
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,9 @@ import ru.egordubina.vkproducts.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen() {
+fun CategoriesScreen(
+    onCategoryClick: (CategoryType) -> Unit
+) {
     Scaffold(
         topBar = { CenterAlignedTopAppBar(title = { Text(stringResource(id = R.string.filters)) }) }
     ) { innerPadding ->
@@ -31,22 +31,22 @@ fun CategoriesScreen() {
             contentPadding = innerPadding,
             modifier = Modifier.consumeWindowInsets(innerPadding)
         ) {
-            items(CategoriesType.entries) {
-                CategoryItem(title = it.title) {}
+            items(CategoryType.entries) {
+                CategoryItem(category = it) { onCategoryClick(it) }
             }
         }
     }
 }
 
 @Composable
-fun CategoryItem(@StringRes title: Int, onClick: () -> Unit) {
+fun CategoryItem(category: CategoryType, onClick: (CategoryType) -> Unit) {
     Text(
-        text = stringResource(id = title),
+        text = stringResource(id = category.title),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .clickable { onClick() }
+            .clickable { onClick(category) }
             .padding(16.dp)
     )
 }

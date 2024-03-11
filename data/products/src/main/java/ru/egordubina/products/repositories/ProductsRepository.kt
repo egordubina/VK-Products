@@ -8,6 +8,6 @@ import javax.inject.Inject
 class ProductsRepositoryImpl @Inject constructor(
     private val productsApi: ProductsApi,
 ) : ProductsRepository {
-    override suspend fun getAllProducts(page: Int): List<Product> =
-        productsApi.loadProducts(page).products.map { it.asDomain() }
+    override suspend fun getAllProducts(page: Int, category: String): List<Product> =
+        productsApi.loadProducts(page = page, category = category).products.map { it.asDomain() }
 }

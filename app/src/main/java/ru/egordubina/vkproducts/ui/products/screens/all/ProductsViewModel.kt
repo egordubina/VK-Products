@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.egordubina.products.usecases.GetProductsUseCase
+import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.asUi
 import javax.inject.Inject
 
@@ -25,18 +26,18 @@ class ProductsViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        loadData(1)
+        loadData(1, CategoryType.ALL.query)
     }
 
     fun refresh() {
-        loadData(1)
+        loadData(1, CategoryType.ALL.query)
     }
 
-    fun loadNextPage(page: Int) {
+    fun loadNextPage(page: Int, category: String) {
         job?.cancel()
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = getProductsUseCase.getAllProducts(page)
+                val response = getProductsUseCase.getAllProducts(page, category)
                 val data = response.map { it.asUi() }
                 val products = when (val state = _uiState.value) {
                     is ProductsUiState.Success -> state.products + data
@@ -52,12 +53,12 @@ class ProductsViewModel @Inject constructor(
         }
     }
 
-    private fun loadData(page: Int) {
+    private fun loadData(page: Int, category: String) {
         job?.cancel()
         _uiState.value = ProductsUiState.Loading
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = getProductsUseCase.getAllProducts(page)
+                val response = getProductsUseCase.getAllProducts(page, category)
                 val productsUi = response.map { it.asUi() }
                 _uiState.update {
                     ProductsUiState.Success(products = productsUi)
