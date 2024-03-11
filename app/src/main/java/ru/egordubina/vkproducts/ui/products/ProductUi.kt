@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.screens.products
+package ru.egordubina.vkproducts.ui.products
 
 import ru.egordubina.products.models.Product
 

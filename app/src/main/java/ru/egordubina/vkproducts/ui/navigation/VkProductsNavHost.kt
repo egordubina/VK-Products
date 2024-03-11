@@ -10,9 +10,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ru.egordubina.vkproducts.ui.screens.products.ProductsViewModel
-import ru.egordubina.vkproducts.ui.screens.products.all.ProductsScreen
-import ru.egordubina.vkproducts.ui.screens.products.detail.ProductDetailScreen
+import ru.egordubina.vkproducts.ui.categories.CategoriesScreen
+import ru.egordubina.vkproducts.ui.products.screens.all.ProductsScreen
+import ru.egordubina.vkproducts.ui.products.screens.all.ProductsViewModel
+import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailScreen
 
 @Composable
 fun VkProductsNavHost(
@@ -30,7 +31,8 @@ fun VkProductsNavHost(
             ProductsScreen(
                 uiState = uiState,
                 refreshAction = { vm.refresh() },
-                loadData = { vm.loadNextPage(it) }
+                loadData = { vm.loadNextPage(it) },
+                navigateToCategories = { navController.navigate(VkProductsDestinations.CATEGORIES.name) }
             )
         }
         composable(
@@ -38,6 +40,9 @@ fun VkProductsNavHost(
             arguments = listOf(navArgument("productId") { type = NavType.IntType })
         ) {
             ProductDetailScreen()
+        }
+        composable(VkProductsDestinations.CATEGORIES.name) {
+            CategoriesScreen()
         }
     }
 }

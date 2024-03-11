@@ -1,6 +1,7 @@
-package ru.egordubina.vkproducts.ui.screens.products.all
+package ru.egordubina.vkproducts.ui.products.screens.all
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +31,7 @@ fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
     loadData: (Int) -> Unit,
+    navigateToCategories: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -41,8 +43,13 @@ fun ProductsScreen(
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { navigateToCategories() }) {
                         Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = { }) {
+                        Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
                     }
                 },
                 scrollBehavior = scrollAppBarBehavior,

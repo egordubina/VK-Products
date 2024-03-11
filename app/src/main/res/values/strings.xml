@@ -3,4 +3,26 @@
     <string name="label__loading">Загружаем товары...</string>
     <string name="label__error">Что-то пошло не так</string>
     <string name="label__retry">Повторить</string>
+    <string name="category_label__smartphones">Smartphones</string>
+    <string name="category_label__laptops">Laptops</string>
+    <string name="category_label__fragrances">Fragrances</string>
+    <string name="category_label__skincare">Skin care</string>
+    <string name="category_label__furniture">Furniture</string>
+    <string name="category_label__home_decoration">Home decorationa</string>
+    <string name="category_label__groceries">Groceries</string>
+    <string name="category_label__tops">Tops</string>
+    <string name="category_label__wonmen_dresses">Womens dresses</string>
+    <string name="category_label__women_shoes">Womens shoes</string>
+    <string name="category_label__mens_shirts">Mens shirts</string>
+    <string name="category_label__mens_shoes">Mens shoes</string>
+    <string name="category_label__men_watches">Mens watches</string>
+    <string name="category_label__women_watches">Womens watches</string>
+    <string name="category_label__women_bags">Womens bags</string>
+    <string name="category_label__women_jewellery">Womeens jewellery</string>
+    <string name="category_label__sunglasses">Sunglasses</string>
+    <string name="category_label__automotive">Automotive</string>
+    <string name="category_label__motorcycle">Motorcycle</string>
+    <string name="category_label__lighting">Lighting</string>
+    <string name="filters">Фильтры</string>
+    <string name="category_label__all">All categories</string>
 </resources>

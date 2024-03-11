@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.screens.products
+package ru.egordubina.vkproducts.ui.products.screens.all
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ru.egordubina.products.usecases.GetProductsUseCase
-import ru.egordubina.vkproducts.ui.screens.products.all.ProductsUiState
+import ru.egordubina.vkproducts.ui.products.asUi
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,6 +1,7 @@
-package ru.egordubina.vkproducts.ui.screens.products.all
+package ru.egordubina.vkproducts.ui.products.screens.all
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,12 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import ru.egordubina.vkproducts.ui.screens.products.ProductUi
+import ru.egordubina.vkproducts.ui.products.ProductUi
 
 @Composable
 internal fun ProductsScreenSuccess(
@@ -58,6 +60,13 @@ internal fun ProductsScreenSuccess(
                     loadData(products.size / 20 + 1)
                 }
         }
+//        item {
+//            Text(
+//                text = "С ❤️ от VK",
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//        }
         item {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }

@@ -1,6 +1,6 @@
-package ru.egordubina.vkproducts.ui.screens.products.all
+package ru.egordubina.vkproducts.ui.products.screens.all
 
-import ru.egordubina.vkproducts.ui.screens.products.ProductUi
+import ru.egordubina.vkproducts.ui.products.ProductUi
 
 sealed class ProductsUiState {
     data object Loading : ProductsUiState()

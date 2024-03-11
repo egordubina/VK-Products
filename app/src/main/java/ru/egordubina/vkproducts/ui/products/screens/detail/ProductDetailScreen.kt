@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.screens.products.detail
+package ru.egordubina.vkproducts.ui.products.screens.detail
 
 import androidx.compose.runtime.Composable
 

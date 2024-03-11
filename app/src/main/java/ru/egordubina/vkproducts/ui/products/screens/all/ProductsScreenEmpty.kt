@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.screens.products.all
+package ru.egordubina.vkproducts.ui.products.screens.all
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
