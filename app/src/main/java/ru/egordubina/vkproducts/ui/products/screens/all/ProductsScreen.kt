@@ -31,10 +31,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.categories.CategoryType
+import ru.egordubina.vkproducts.ui.products.ProductUi
+import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
+import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateParameterProvider
+import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -135,5 +141,22 @@ fun ProductsScreen(
                 onItemClick = { onItemClick(it) },
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun ProductsScreenSuccessPreview(
+    @PreviewParameter(ProductsUiStateParameterProvider::class) uiState: ProductsUiState,
+) {
+    VkProductsTheme {
+        ProductsScreen(
+            uiState = uiState,
+            refreshAction = {},
+            loadData = {},
+            navigateToCategories = {},
+            clearSelectedCategory = {},
+            onItemClick = {},
+        )
     }
 }
