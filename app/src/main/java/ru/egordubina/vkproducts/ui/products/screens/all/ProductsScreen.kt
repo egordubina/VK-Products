@@ -130,7 +130,6 @@ fun ProductsScreen(
 
             is ProductsUiState.Success -> ProductsScreenSuccess(
                 products = uiState.products,
-                selectedCategory = uiState.selectedCategory,
                 innerPadding = innerPadding,
                 loadData = { page -> loadData(page) },
                 onItemClick = { onItemClick(it) },

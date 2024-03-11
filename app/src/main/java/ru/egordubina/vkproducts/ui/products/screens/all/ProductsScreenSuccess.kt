@@ -1,7 +1,6 @@
 package ru.egordubina.vkproducts.ui.products.screens.all
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Star
@@ -26,25 +24,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.ProductUi
+import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
+import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @Composable
 internal fun ProductsScreenSuccess(
     products: List<ProductUi>,
-    selectedCategory: CategoryType,
     innerPadding: PaddingValues,
     loadData: (Int) -> Unit,
     onItemClick: (Int) -> Unit,
@@ -61,19 +58,12 @@ internal fun ProductsScreenSuccess(
         itemsIndexed(products, key = { index, item -> item.id }) { index, item ->
             ProductCard(productUi = item, onClick = { onItemClick(it) })
             // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
-            // занимает адеквантое место. При бОльшем кол-ве, конечноо же нужно кэшировать и выгружать
+            // занимает адеквантое место. При бОльшем кол-ве, конечноо же, нужно кэшировать и выгружать
             if (index == products.size - 10)
                 LaunchedEffect(key1 = true) {
                     loadData(products.size / 20 + 1)
                 }
         }
-//        item {
-//            Text(
-//                text = "С ❤️ от VK",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//        }
         item {
             Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
         }
@@ -81,7 +71,7 @@ internal fun ProductsScreenSuccess(
 }
 
 @Composable
-fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
+private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
     Card(
         onClick = { onClick(productUi.id) },
     ) {
@@ -97,28 +87,11 @@ fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
                 .padding(bottom = 8.dp)
                 .fillMaxWidth()
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        ) {
-            Text(
-                text = productUi.priceWithDiscount.toString(),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(
-                text = productUi.price.toString(),
-                textDecoration = TextDecoration.LineThrough,
-                style = MaterialTheme.typography.titleSmall
-            )
-            Text(
-                text = "-${productUi.discountPercentage}%",
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
+        ProductCardPrice(
+            productUi.priceWithDiscount,
+            productUi.price,
+            productUi.discountPercentage
+        )
         Text(
             text = productUi.title,
             maxLines = 1,
@@ -156,5 +129,64 @@ fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
                 color = MaterialTheme.colorScheme.tertiary
             )
         }
+    }
+}
+
+@Composable
+private fun ProductCardPrice(
+    priceWithDiscount: String,
+    price: String,
+    discountPercentage: Int,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.Bottom,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
+        Text(
+            text = priceWithDiscount,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier.alignByBaseline()
+        )
+        Text(
+            text = price,
+            textDecoration = TextDecoration.LineThrough,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.alignByBaseline()
+        )
+        Text(
+            text = "-${discountPercentage}%",
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.alignByBaseline()
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSuccessScreen(
+    @PreviewParameter(ProductsPreviewParameterProvider::class, limit = 1) products: ProductUi,
+) {
+    VkProductsTheme {
+        ProductsScreenSuccess(
+            products = listOf(products),
+            innerPadding = PaddingValues(0.dp),
+            {},
+            {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewItemCard(
+    @PreviewParameter(ProductsPreviewParameterProvider::class, limit = 1) product: ProductUi,
+) {
+    VkProductsTheme {
+        ProductCard(product) {}
     }
 }

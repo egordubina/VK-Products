@@ -1,13 +1,14 @@
 package ru.egordubina.vkproducts.ui.products
 
 import ru.egordubina.products.models.Product
+import ru.egordubina.products.utils.toUsd
 
 data class ProductUi(
     val id: Int,
     val title: String,
     val description: String,
-    val priceWithDiscount: Int,
-    val price: Int,
+    val priceWithDiscount: String,
+    val price: String,
     val discountPercentage: Int,
     val rating: Float,
     val stock: Int,
@@ -21,8 +22,8 @@ fun Product.asUi(): ProductUi = ProductUi(
     id = this.id,
     title = this.title,
     description = this.description,
-    price = (this.price/(100 - this.discountPercentage) * 100).toInt(),
-    priceWithDiscount = this.price,
+    price = (this.price/(100 - this.discountPercentage) * 100).toInt().toUsd(),
+    priceWithDiscount = this.price.toUsd(),
     discountPercentage = this.discountPercentage.toInt(),
     rating = this.rating,
     stock = this.stock,

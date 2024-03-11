@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 interface ProductsApi {
     suspend fun loadProducts(page: Int, category: String): ResponseDTO // if page = 1 -> skip = (page - 1) * 20, limit = 20
-    suspend fun loadProductById(id: Int): ProductDTO // if page = 1 -> skip = (page - 1) * 20, limit = 20
+    suspend fun loadProductById(id: Int): ProductDTO
 }
 
 
