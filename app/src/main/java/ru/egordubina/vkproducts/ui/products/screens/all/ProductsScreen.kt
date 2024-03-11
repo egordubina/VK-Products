@@ -44,6 +44,7 @@ fun ProductsScreen(
     loadData: (Int) -> Unit,
     navigateToCategories: (CategoryType) -> Unit,
     clearSelectedCategory: () -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -131,7 +132,8 @@ fun ProductsScreen(
                 products = uiState.products,
                 selectedCategory = uiState.selectedCategory,
                 innerPadding = innerPadding,
-                loadData = { page -> loadData(page) }
+                loadData = { page -> loadData(page) },
+                onItemClick = { onItemClick(it) },
             )
         }
     }

@@ -1,5 +1,6 @@
 package ru.egordubina.vkproducts.ui.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,6 +16,7 @@ import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.screens.all.ProductsScreen
 import ru.egordubina.vkproducts.ui.products.screens.all.ProductsViewModel
 import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailScreen
+import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailViewModel
 
 @Composable
 fun VkProductsNavHost(
@@ -41,6 +43,9 @@ fun VkProductsNavHost(
                 },
                 clearSelectedCategory = {
                     navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=\"\"")
+                },
+                onItemClick = {
+                    navController.navigate("${VkProductsDestinations.DETAIL.name}/$it")
                 }
             )
         }
@@ -48,7 +53,12 @@ fun VkProductsNavHost(
             "${VkProductsDestinations.DETAIL.name}/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.IntType })
         ) {
-            ProductDetailScreen()
+            val vm: ProductDetailViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsState()
+            ProductDetailScreen(
+                uiState = uiState,
+                onBackButtonClick = { navController.popBackStack() }
+            )
         }
         composable(
             "${VkProductsDestinations.CATEGORIES.name}?category={category}",
@@ -58,7 +68,8 @@ fun VkProductsNavHost(
                 selectedCategory = CategoryType[it.arguments?.getString("category") ?: ""] ?: CategoryType.ALL,
                 onCategoryClick = {
                     navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=${it.query}")
-                }
+                },
+                onBackButtonClick = { navController.popBackStack() }
             )
         }
     }

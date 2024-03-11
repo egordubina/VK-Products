@@ -47,6 +47,7 @@ internal fun ProductsScreenSuccess(
     selectedCategory: CategoryType,
     innerPadding: PaddingValues,
     loadData: (Int) -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -58,7 +59,7 @@ internal fun ProductsScreenSuccess(
             .consumeWindowInsets(innerPadding)
     ) {
         itemsIndexed(products, key = { index, item -> item.id }) { index, item ->
-            ProductCard(productUi = item, onClick = {})
+            ProductCard(productUi = item, onClick = { onItemClick(it) })
             // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
             // занимает адеквантое место. При бОльшем кол-ве, конечноо же нужно кэшировать и выгружать
             if (index == products.size - 10)

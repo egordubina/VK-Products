@@ -10,4 +10,7 @@ class ProductsRepositoryImpl @Inject constructor(
 ) : ProductsRepository {
     override suspend fun getAllProducts(page: Int, category: String): List<Product> =
         productsApi.loadProducts(page = page, category = category).products.map { it.asDomain() }
+
+    override suspend fun getProductById(id: Int): Product =
+        productsApi.loadProductById(id).asDomain()
 }
