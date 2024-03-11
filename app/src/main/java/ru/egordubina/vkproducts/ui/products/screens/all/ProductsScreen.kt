@@ -1,12 +1,21 @@
 package ru.egordubina.vkproducts.ui.products.screens.all
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -22,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
+import ru.egordubina.vkproducts.ui.categories.CategoryType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +42,8 @@ fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
     loadData: (Int) -> Unit,
-    navigateToCategories: () -> Unit,
+    navigateToCategories: (CategoryType) -> Unit,
+    clearSelectedCategory: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -40,20 +52,56 @@ fun ProductsScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.app_name)) },
-                actions = {
-                    IconButton(onClick = { navigateToCategories() }) {
-                        Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
+            Column {
+                CenterAlignedTopAppBar(
+                    title = { Text(stringResource(R.string.app_name)) },
+                    actions = {
+                        IconButton(onClick = { navigateToCategories(if (uiState is ProductsUiState.Success) uiState.selectedCategory else CategoryType.ALL) }) {
+                            Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
+                        }
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { }) {
+                            Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(scrolledContainerColor = MaterialTheme.colorScheme.background),
+                    scrollBehavior = scrollAppBarBehavior,
+                )
+                if (uiState is ProductsUiState.Success)
+                    LazyRow(
+                        contentPadding = PaddingValues(8.dp),
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background)
+                            .fillMaxWidth()
+                    ) {
+                        item {
+                            FilterChip(
+                                selected = uiState.selectedCategory != CategoryType.ALL,
+                                onClick = {
+                                    if (uiState.selectedCategory == CategoryType.ALL)
+                                        navigateToCategories(uiState.selectedCategory)
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(
+                                            id = CategoryType[uiState.selectedCategory.query.ifEmpty { "null" }]?.title
+                                                ?: R.string.category_label__select
+                                        )
+                                    )
+                                },
+                                trailingIcon = {
+                                    if (uiState.selectedCategory != CategoryType.ALL)
+                                        Icon(
+                                            imageVector = Icons.Rounded.Close,
+                                            contentDescription = null,
+                                            modifier = Modifier.clickable { clearSelectedCategory() }
+                                        )
+                                }
+                            )
+                        }
                     }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { }) {
-                        Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
-                    }
-                },
-                scrollBehavior = scrollAppBarBehavior,
-            )
+            }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
@@ -81,6 +129,7 @@ fun ProductsScreen(
 
             is ProductsUiState.Success -> ProductsScreenSuccess(
                 products = uiState.products,
+                selectedCategory = uiState.selectedCategory,
                 innerPadding = innerPadding,
                 loadData = { page -> loadData(page) }
             )

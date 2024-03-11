@@ -1,5 +1,6 @@
 package ru.egordubina.vkproducts.ui.products.screens.all
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getProductsUseCase: GetProductsUseCase,
 ) : ViewModel() {
+    private val category = checkNotNull(savedStateHandle["category"]).toString()
     private var _uiState: MutableStateFlow<ProductsUiState> =
         MutableStateFlow(ProductsUiState.Loading)
     val uiState: StateFlow<ProductsUiState> = _uiState.asStateFlow()
@@ -26,11 +29,11 @@ class ProductsViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        loadData(1, CategoryType.ALL.query)
+        loadData(1, CategoryType[category]?.query ?: "")
     }
 
     fun refresh() {
-        loadData(1, CategoryType.ALL.query)
+        loadData(1, CategoryType[category]?.query ?: "")
     }
 
     fun loadNextPage(page: Int, category: String) {
@@ -44,7 +47,10 @@ class ProductsViewModel @Inject constructor(
                     else -> data
                 }
                 _uiState.update {
-                    ProductsUiState.Success(products)
+                    ProductsUiState.Success(
+                        selectedCategory = CategoryType[category] ?: CategoryType.ALL,
+                        products = products
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -61,7 +67,10 @@ class ProductsViewModel @Inject constructor(
                 val response = getProductsUseCase.getAllProducts(page, category)
                 val productsUi = response.map { it.asUi() }
                 _uiState.update {
-                    ProductsUiState.Success(products = productsUi)
+                    ProductsUiState.Success(
+                        selectedCategory = CategoryType[category] ?: CategoryType.ALL,
+                        products = productsUi
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

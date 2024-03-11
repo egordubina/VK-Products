@@ -23,12 +23,12 @@ fun VkProductsNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "${VkProductsDestinations.PRODUCTS.name}/{category}",
+        startDestination = VkProductsDestinations.PRODUCTS.name,
         modifier = modifier
     ) {
         composable(
-            "${VkProductsDestinations.PRODUCTS.name}/{category}",
-            arguments = listOf(navArgument("category") { type = NavType.StringType })
+            "${VkProductsDestinations.PRODUCTS.name}?category={category}",
+            arguments = listOf(navArgument("category") { defaultValue = "" })
         ) {
             val vm: ProductsViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsState()
@@ -36,7 +36,12 @@ fun VkProductsNavHost(
                 uiState = uiState,
                 refreshAction = { vm.refresh() },
                 loadData = { vm.loadNextPage(it, CategoryType.ALL.query) },
-                navigateToCategories = { navController.navigate(VkProductsDestinations.CATEGORIES.name) }
+                navigateToCategories = {
+                    navController.navigate("${VkProductsDestinations.CATEGORIES.name}?category=${it.query}")
+                },
+                clearSelectedCategory = {
+                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=\"\"")
+                }
             )
         }
         composable(
@@ -45,8 +50,16 @@ fun VkProductsNavHost(
         ) {
             ProductDetailScreen()
         }
-        composable(VkProductsDestinations.CATEGORIES.name) {
-            CategoriesScreen(onCategoryClick = { navController.popBackStack() })
+        composable(
+            "${VkProductsDestinations.CATEGORIES.name}?category={category}",
+            arguments = listOf(navArgument("category") { defaultValue = "" })
+        ) {
+            CategoriesScreen(
+                selectedCategory = CategoryType[it.arguments?.getString("category") ?: ""] ?: CategoryType.ALL,
+                onCategoryClick = {
+                    navController.navigate("${VkProductsDestinations.PRODUCTS.name}?category=${it.query}")
+                }
+            )
         }
     }
 }

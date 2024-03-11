@@ -17,14 +17,4 @@ import androidx.compose.ui.unit.dp
 internal fun ProductScreenError(
     innerPadding: PaddingValues
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-    ) {
-        Button(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Rounded.RestartAlt, contentDescription = null)
-            Text(text = "Повторить", modifier = Modifier.padding(start = 4.dp))
-        }
-    }
 }

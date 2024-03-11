@@ -14,7 +14,7 @@ enum class CategoryType(@StringRes val title: Int, val query: String) {
     FURNITURE(R.string.category_label__furniture, "furniture"),
     TOPS(R.string.category_label__tops, "tops"),
     WOMENS_DRESSES(R.string.category_label__wonmen_dresses, "womens-dresses"),
-    WOMENS_SHOES(R.string.category_label__women_shoes, "womes-shoes"),
+    WOMENS_SHOES(R.string.category_label__women_shoes, "womens-shoes"),
     MENS_SHIRTS(R.string.category_label__mens_shirts, "mens-shirts"),
     MENS_SHOES(R.string.category_label__mens_shoes, "mens-shoes"),
     MENS_WATCHES(R.string.category_label__men_watches, "mens-wathes"),
@@ -24,5 +24,10 @@ enum class CategoryType(@StringRes val title: Int, val query: String) {
     SUNGLASSES(R.string.category_label__sunglasses, "sunglasses"),
     AUTOMOTIVE(R.string.category_label__automotive, "automotive"),
     MOTORCYCLE(R.string.category_label__motorcycle, "motorcycle"),
-    LIGHTING(R.string.category_label__lighting, "lighting")
+    LIGHTING(R.string.category_label__lighting, "lighting");
+
+    companion object {
+        private val map = CategoryType.entries.associateBy { it.query }
+        operator fun get(query: String) = map[query]
+    }
 }

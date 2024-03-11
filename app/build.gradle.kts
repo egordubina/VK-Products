@@ -56,8 +56,6 @@ android {
 dependencies {
     implementation(project(":domain:products"))
     implementation(project(":data:products"))
-    implementation(project(":domain:categories"))
-    implementation(project(":data:categories"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
