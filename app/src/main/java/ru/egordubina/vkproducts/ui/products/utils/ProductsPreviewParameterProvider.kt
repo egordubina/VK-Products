@@ -3,7 +3,7 @@ package ru.egordubina.vkproducts.ui.products.utils
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import ru.egordubina.vkproducts.ui.products.ProductUi
 
-class ProductsPreviewParameterProvider : PreviewParameterProvider<ProductUi> {
+internal class ProductsPreviewParameterProvider : PreviewParameterProvider<ProductUi> {
     override val values: Sequence<ProductUi>
         get() = sequenceOf(
             ProductUi(id = 0,

@@ -3,7 +3,7 @@ package ru.egordubina.vkproducts.ui.products
 import ru.egordubina.products.models.Product
 import ru.egordubina.products.utils.toUsd
 
-data class ProductUi(
+internal data class ProductUi(
     val id: Int,
     val title: String,
     val description: String,
@@ -18,7 +18,7 @@ data class ProductUi(
     val images: List<String>,
 )
 
-fun Product.asUi(): ProductUi = ProductUi(
+internal fun Product.asUi(): ProductUi = ProductUi(
     id = this.id,
     title = this.title,
     description = this.description,

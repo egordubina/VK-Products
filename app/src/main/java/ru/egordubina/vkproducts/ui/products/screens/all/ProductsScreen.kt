@@ -38,16 +38,17 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.categories.CategoryType
+import ru.egordubina.vkproducts.ui.products.utils.CategoriesParameterProvider
 import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateParameterProvider
 import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductsScreen(
+internal fun ProductsScreen(
     uiState: ProductsUiState,
     refreshAction: () -> Unit,
     loadData: (Int) -> Unit,
-    onCategoriesButtonClick: (CategoryType) -> Unit,
+    onCategoryButtonClick: (CategoryType) -> Unit,
     clearSelectedCategory: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -62,7 +63,7 @@ fun ProductsScreen(
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
                     actions = {
-                        IconButton(onClick = { onCategoriesButtonClick(if (uiState is ProductsUiState.Success) uiState.selectedCategory else CategoryType.ALL) }) {
+                        IconButton(onClick = { onCategoryButtonClick(if (uiState is ProductsUiState.Success) uiState.selectedCategory else CategoryType.ALL) }) {
                             Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
                         }
                     },
@@ -75,38 +76,11 @@ fun ProductsScreen(
                     scrollBehavior = scrollAppBarBehavior,
                 )
                 if (uiState is ProductsUiState.Success)
-                    LazyRow(
-                        contentPadding = PaddingValues(8.dp),
-                        modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background)
-                            .fillMaxWidth()
-                    ) {
-                        item {
-                            FilterChip(
-                                selected = uiState.selectedCategory != CategoryType.ALL,
-                                onClick = {
-                                    if (uiState.selectedCategory == CategoryType.ALL)
-                                        onCategoriesButtonClick(uiState.selectedCategory)
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(
-                                            id = CategoryType[uiState.selectedCategory.query.ifEmpty { "null" }]?.title
-                                                ?: R.string.category_label__select
-                                        )
-                                    )
-                                },
-                                trailingIcon = {
-                                    if (uiState.selectedCategory != CategoryType.ALL)
-                                        Icon(
-                                            imageVector = Icons.Rounded.Close,
-                                            contentDescription = null,
-                                            modifier = Modifier.clickable { clearSelectedCategory() }
-                                        )
-                                }
-                            )
-                        }
-                    }
+                    QuickActions(
+                        selectedCategory = uiState.selectedCategory,
+                        clearSelectedCategory = clearSelectedCategory,
+                        onCategoryButtonClick = onCategoryButtonClick,
+                    )
             }
         },
         snackbarHost = {
@@ -148,9 +122,89 @@ fun ProductsScreen(
     }
 }
 
+@Composable
+private fun QuickActions(
+    selectedCategory: CategoryType,
+    clearSelectedCategory: () -> Unit,
+    onCategoryButtonClick: (CategoryType) -> Unit,
+) {
+    LazyRow(
+        contentPadding = PaddingValues(8.dp),
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .fillMaxWidth()
+    ) {
+        item {
+            CategoryChip(
+                selectedCategory = selectedCategory,
+                onChipClick = onCategoryButtonClick,
+                clearSelectedCategory = clearSelectedCategory
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryChip(
+    selectedCategory: CategoryType,
+    onChipClick: (CategoryType) -> Unit,
+    clearSelectedCategory: () -> Unit,
+) {
+    FilterChip(
+        selected = selectedCategory != CategoryType.ALL,
+        onClick = {
+            if (selectedCategory == CategoryType.ALL)
+                onChipClick(selectedCategory)
+        },
+        label = {
+            Text(
+                text = stringResource(
+                    id = CategoryType[selectedCategory.query.ifEmpty { "null" }]?.title
+                        ?: R.string.category_label__select
+                )
+            )
+        },
+        trailingIcon = {
+            if (selectedCategory != CategoryType.ALL)
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = null,
+                    modifier = Modifier.clickable { clearSelectedCategory() }
+                )
+        }
+    )
+}
+
 @Preview
 @Composable
-fun ProductsScreenSuccessPreview(
+private fun QuickActionsPreview(
+    @PreviewParameter(CategoriesParameterProvider::class) category: CategoryType,
+) {
+    VkProductsTheme {
+        QuickActions(
+            selectedCategory = category,
+            clearSelectedCategory = { }
+        ) {}
+    }
+}
+
+@Preview
+@Composable
+private fun CategoryChipPreview(
+    @PreviewParameter(CategoriesParameterProvider::class) category: CategoryType,
+) {
+    VkProductsTheme {
+        CategoryChip(
+            selectedCategory = category,
+            onChipClick = {},
+            clearSelectedCategory = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ProductsScreenSuccessPreview(
     @PreviewParameter(ProductsUiStateParameterProvider::class) uiState: ProductsUiState,
 ) {
     VkProductsTheme {
@@ -158,7 +212,7 @@ fun ProductsScreenSuccessPreview(
             uiState = uiState,
             refreshAction = {},
             loadData = {},
-            onCategoriesButtonClick = {},
+            onCategoryButtonClick = {},
             clearSelectedCategory = {},
             onItemClick = {},
         )

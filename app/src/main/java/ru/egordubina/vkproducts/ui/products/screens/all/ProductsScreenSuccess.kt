@@ -34,9 +34,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.ProductUi
 import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
+import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateSuccessParameterProvider
 import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @Composable
@@ -55,7 +55,7 @@ internal fun ProductsScreenSuccess(
             .padding(horizontal = 8.dp)
             .consumeWindowInsets(innerPadding)
     ) {
-        itemsIndexed(products, key = { index, item -> item.id }) { index, item ->
+        itemsIndexed(products, key = { _, item -> item.id }) { index, item ->
             ProductCard(productUi = item, onClick = { onItemClick(it) })
             // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
             // занимает адеквантое место. При бОльшем кол-ве, конечноо же, нужно кэшировать и выгружать
@@ -113,22 +113,39 @@ private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 8.dp)
-                .padding(bottom = 8.dp),
+                .padding(bottom = 8.dp)
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Star,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.tertiary,
-            )
+            ProductCardRating(rating = productUi.rating.toString())
             Text(
-                text = productUi.rating.toString(),
+                text = "Left: ${productUi.stock}",
+                color = if (productUi.stock < 50) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                fontWeight = if (productUi.stock < 50) FontWeight.Bold else null,
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.tertiary
             )
         }
+    }
+}
+
+@Composable
+private fun ProductCardRating(rating: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.Star,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.tertiary,
+        )
+        Text(
+            text = rating,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.tertiary,
+        )
     }
 }
 
@@ -147,6 +164,8 @@ private fun ProductCardPrice(
     ) {
         Text(
             text = priceWithDiscount,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.tertiary,
@@ -154,12 +173,16 @@ private fun ProductCardPrice(
         )
         Text(
             text = price,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             textDecoration = TextDecoration.LineThrough,
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.alignByBaseline()
         )
         Text(
             text = "-${discountPercentage}%",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.alignByBaseline()
         )
@@ -169,11 +192,11 @@ private fun ProductCardPrice(
 @Preview
 @Composable
 private fun PreviewSuccessScreen(
-    @PreviewParameter(ProductsPreviewParameterProvider::class, limit = 1) products: ProductUi,
+    @PreviewParameter(ProductsUiStateSuccessParameterProvider::class) uiState: ProductsUiState.Success,
 ) {
     VkProductsTheme {
         ProductsScreenSuccess(
-            products = listOf(products),
+            products = uiState.products,
             innerPadding = PaddingValues(0.dp),
             {},
             {}

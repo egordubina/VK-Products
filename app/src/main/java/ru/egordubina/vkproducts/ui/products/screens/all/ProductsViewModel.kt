@@ -17,7 +17,7 @@ import ru.egordubina.vkproducts.ui.products.asUi
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductsViewModel @Inject constructor(
+internal class ProductsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getProductsUseCase: GetProductsUseCase,
 ) : ViewModel() {

@@ -18,7 +18,7 @@ import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailScreen
 import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailViewModel
 
 @Composable
-fun VkProductsNavHost(
+internal fun VkProductsNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
@@ -37,7 +37,7 @@ fun VkProductsNavHost(
                 uiState = uiState,
                 refreshAction = { vm.refresh() },
                 loadData = { vm.loadNextPage(it, CategoryType.ALL.query) },
-                onCategoriesButtonClick = {
+                onCategoryButtonClick = {
                     navController.navigate("${VkProductsDestinations.CATEGORIES.name}?category=${it.query}")
                 },
                 clearSelectedCategory = {

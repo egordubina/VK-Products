@@ -34,7 +34,7 @@ internal fun ProductScreenLoading(
 
 @Preview
 @Composable
-fun ProductScreenLoadingPreview() {
+private fun ProductScreenLoadingPreview() {
     VkProductsTheme {
         ProductScreenLoading(PaddingValues(0.dp))
     }

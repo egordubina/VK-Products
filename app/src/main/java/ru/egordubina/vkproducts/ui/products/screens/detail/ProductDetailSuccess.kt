@@ -47,7 +47,7 @@ import ru.egordubina.vkproducts.ui.products.ProductUi
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductDetailSuccess(
+internal fun ProductDetailSuccess(
     product: ProductUi,
     modifier: Modifier,
 ) {
