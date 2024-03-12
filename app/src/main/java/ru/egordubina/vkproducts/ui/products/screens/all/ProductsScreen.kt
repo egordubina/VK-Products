@@ -116,7 +116,6 @@ internal fun ProductsScreen(
         },
         modifier = Modifier.nestedScroll(scrollAppBarBehavior.nestedScrollConnection)
     ) { innerPadding ->
-
         if (uiState.isError)
             LaunchedEffect(snackBarHostState) {
                 scope.launch {
