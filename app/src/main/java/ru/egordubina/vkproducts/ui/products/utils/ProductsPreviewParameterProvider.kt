@@ -15,7 +15,7 @@ internal class ProductsPreviewParameterProvider : PreviewParameterProvider<Produ
                 rating = 5f,
                 stock = 1,
                 brand = "Google",
-                category = "Smartphones",
+                category = "smartphones",
                 thumbnail = "",
                 images = emptyList()
             ),

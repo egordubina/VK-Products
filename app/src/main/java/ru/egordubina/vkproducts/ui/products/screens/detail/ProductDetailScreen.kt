@@ -91,7 +91,7 @@ internal fun ProductDetailScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = { }, enabled = false) {
                             Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
                         }
                         IconButton(onClick = {
@@ -138,8 +138,7 @@ internal fun ProductDetailSuccess(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         if (product.images.isNotEmpty()) {
             val pagerState = rememberPagerState(pageCount = { product.images.size })
@@ -291,6 +290,8 @@ internal fun ProductDetailSuccess(
         if (product.stock > 0)
             Text(
                 text = stringResource(id = R.string.label__left_stock, product.stock),
+                color = if (product.stock < 50) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                fontWeight = if (product.stock < 50) FontWeight.Bold else null,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         if (product.description.isNotEmpty()) {

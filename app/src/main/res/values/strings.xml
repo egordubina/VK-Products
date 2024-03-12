@@ -28,4 +28,5 @@
     <string name="category_label__select">Select category</string>
     <string name="label__related_products">Related products</string>
     <string name="label__left_stock">Left in stock: %d</string>
+    <string name="label__left_stock_short">Left: %d</string>
 </resources>

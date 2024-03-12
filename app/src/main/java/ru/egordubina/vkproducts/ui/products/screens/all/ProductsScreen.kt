@@ -259,7 +259,7 @@ private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
         ) {
             ProductCardRating(rating = productUi.rating.toString())
             Text(
-                text = "Left: ${productUi.stock}",
+                text = stringResource(id = R.string.label__left_stock_short, productUi.stock),
                 color = if (productUi.stock < 50) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 fontWeight = if (productUi.stock < 50) FontWeight.Bold else null,
                 style = MaterialTheme.typography.labelLarge,
