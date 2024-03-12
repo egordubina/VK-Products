@@ -75,18 +75,7 @@ private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
     Card(
         onClick = { onClick(productUi.id) },
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(productUi.thumbnail)
-                .crossfade(true)
-                .build(),
-            contentDescription = productUi.title,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .aspectRatio(1f)
-                .padding(bottom = 8.dp)
-                .fillMaxWidth()
-        )
+        ProductImage(thumbnail = productUi.thumbnail)
         ProductCardPrice(
             productUi.priceWithDiscount,
             productUi.price,
@@ -128,6 +117,22 @@ private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
             )
         }
     }
+}
+
+@Composable
+private fun ProductImage(thumbnail: String) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(thumbnail)
+            .crossfade(true)
+            .build(),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .aspectRatio(1f)
+            .padding(bottom = 8.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Composable
