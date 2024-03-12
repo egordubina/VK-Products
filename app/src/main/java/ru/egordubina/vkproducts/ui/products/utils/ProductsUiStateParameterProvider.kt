@@ -8,10 +8,7 @@ import ru.egordubina.vkproducts.ui.products.screens.all.ProductsUiState
 internal class ProductsUiStateParameterProvider : PreviewParameterProvider<ProductsUiState> {
     override val values: Sequence<ProductsUiState>
         get() = sequenceOf(
-            ProductsUiState.Error,
-            ProductsUiState.Loading,
-            ProductsUiState.Empty,
-            ProductsUiState.Success(
+            ProductsUiState(
                 selectedCategory = CategoryType.ALL,
                 products = listOf(
                     ProductUi(
@@ -44,7 +41,7 @@ internal class ProductsUiStateParameterProvider : PreviewParameterProvider<Produ
                     ),
                 )
             ),
-            ProductsUiState.Success(
+            ProductsUiState(
                 selectedCategory = CategoryType.SMARTPHONES,
                 products = listOf(
                     ProductUi(

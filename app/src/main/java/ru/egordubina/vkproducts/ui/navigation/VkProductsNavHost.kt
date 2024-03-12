@@ -60,7 +60,8 @@ internal fun VkProductsNavHost(
             val uiState by vm.uiState.collectAsState()
             ProductDetailScreen(
                 uiState = uiState,
-                onBackButtonClick = { navController.popBackStack() }
+                onBackButtonClick = { navController.popBackStack() },
+                refreshAction = { vm.refresh() }
             )
         }
         composable(

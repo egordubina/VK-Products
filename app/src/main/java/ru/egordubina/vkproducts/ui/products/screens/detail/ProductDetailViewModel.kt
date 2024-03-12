@@ -22,7 +22,7 @@ internal class ProductDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val id = checkNotNull(savedStateHandle["productId"]).toString().toInt()
     private val _uiState: MutableStateFlow<ProductDetailUiState> =
-        MutableStateFlow(ProductDetailUiState.Loading)
+        MutableStateFlow(ProductDetailUiState())
     val uiState: StateFlow<ProductDetailUiState> = _uiState.asStateFlow()
     private var job: Job? = null
 
@@ -30,16 +30,30 @@ internal class ProductDetailViewModel @Inject constructor(
         loadData()
     }
 
+    fun refresh() {
+        loadData()
+    }
+
     private fun loadData() {
         job?.cancel()
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                isError = false
+            )
+        }
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = getProductsUseCase.getProductById(id)
-                _uiState.update { ProductDetailUiState.Success(product = response.asUi()) }
+                _uiState.update { it.copy(
+                    product = response.asUi(),
+                    isError = false
+                ) }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiState.update { ProductDetailUiState.Error }
+                _uiState.update { it.copy(isError = true) }
             }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 }

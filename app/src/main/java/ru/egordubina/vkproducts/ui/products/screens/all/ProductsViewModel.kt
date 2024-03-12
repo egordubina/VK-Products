@@ -23,7 +23,7 @@ internal class ProductsViewModel @Inject constructor(
 ) : ViewModel() {
     private val category = checkNotNull(savedStateHandle["category"]).toString()
     private var _uiState: MutableStateFlow<ProductsUiState> =
-        MutableStateFlow(ProductsUiState.Loading)
+        MutableStateFlow(ProductsUiState())
     val uiState: StateFlow<ProductsUiState> = _uiState.asStateFlow()
 
     private var job: Job? = null
@@ -38,44 +38,44 @@ internal class ProductsViewModel @Inject constructor(
 
     fun loadNextPage(page: Int, category: String) {
         job?.cancel()
+        _uiState.update {
+            it.copy(selectedCategory = CategoryType[category] ?: CategoryType.ALL)
+        }
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = getProductsUseCase.getAllProducts(page, category)
                 val data = response.map { it.asUi() }
-                val products = when (val state = _uiState.value) {
-                    is ProductsUiState.Success -> state.products + data
-                    else -> data
-                }
-                _uiState.update {
-                    ProductsUiState.Success(
-                        selectedCategory = CategoryType[category] ?: CategoryType.ALL,
-                        products = products
-                    )
-                }
+                _uiState.update { it.copy(products = it.products + data) }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiState.update { ProductsUiState.Error }
+                _uiState.update { it.copy(isError = true) }
             }
         }
     }
 
     private fun loadData(page: Int, category: String) {
         job?.cancel()
-        _uiState.value = ProductsUiState.Loading
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                selectedCategory = CategoryType[category] ?: CategoryType.ALL
+            )
+        }
         job = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = getProductsUseCase.getAllProducts(page, category)
                 val productsUi = response.map { it.asUi() }
                 _uiState.update {
-                    ProductsUiState.Success(
-                        selectedCategory = CategoryType[category] ?: CategoryType.ALL,
-                        products = productsUi
+                    it.copy(
+                        products = productsUi,
+                        isError = false
                     )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _uiState.update { ProductsUiState.Error }
+                _uiState.update { it.copy(isError = true) }
             }
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 }

@@ -5,10 +5,10 @@ import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.ProductUi
 import ru.egordubina.vkproducts.ui.products.screens.all.ProductsUiState
 
-internal class ProductsUiStateSuccessParameterProvider : PreviewParameterProvider<ProductsUiState.Success> {
-    override val values: Sequence<ProductsUiState.Success>
+internal class ProductsUiStateSuccessParameterProvider : PreviewParameterProvider<ProductsUiState> {
+    override val values: Sequence<ProductsUiState>
         get() = sequenceOf(
-            ProductsUiState.Success(
+            ProductsUiState(
                 selectedCategory = CategoryType.ALL,
                 products = listOf(
                     ProductUi(
