@@ -16,6 +16,8 @@ import ru.egordubina.vkproducts.ui.products.screens.all.ProductsScreen
 import ru.egordubina.vkproducts.ui.products.screens.all.ProductsViewModel
 import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailScreen
 import ru.egordubina.vkproducts.ui.products.screens.detail.ProductDetailViewModel
+import ru.egordubina.vkproducts.ui.search.SearchScreen
+import ru.egordubina.vkproducts.ui.search.SearchViewModel
 
 @Composable
 internal fun VkProductsNavHost(
@@ -50,6 +52,9 @@ internal fun VkProductsNavHost(
                 onItemClick = {
                     navController.navigate("${VkProductsDestinations.DETAIL.name}/$it")
                 },
+                onSearchButtonClick = {
+                    navController.navigate(VkProductsDestinations.SEARCH.name)
+                }
             )
         }
         composable(
@@ -79,6 +84,19 @@ internal fun VkProductsNavHost(
                     }
                 },
                 onBackButtonClick = { navController.popBackStack() }
+            )
+        }
+        composable(VkProductsDestinations.SEARCH.name) {
+            val vm: SearchViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsState()
+            SearchScreen(
+                uiState = uiState,
+                onBackButtonAction = { navController.popBackStack() },
+                onSearchButtonClick = { vm.searchProducts(query = it, page = 1) },
+                loadData = { q, page -> vm.loadNextPage(query = q, page = page) },
+                onSearchItemClick = {
+                    navController.navigate("${VkProductsDestinations.DETAIL.name}/$it")
+                }
             )
         }
     }

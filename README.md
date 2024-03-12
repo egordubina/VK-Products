@@ -8,6 +8,7 @@
 - Ktor
 - KotlinX Serialization
 - Room
+- Coil
 
 ## Краткий обзор
 

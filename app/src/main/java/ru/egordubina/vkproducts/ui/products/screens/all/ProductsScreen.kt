@@ -77,6 +77,7 @@ internal fun ProductsScreen(
     onCategoryButtonClick: (CategoryType) -> Unit,
     clearSelectedCategory: () -> Unit,
     onItemClick: (Int) -> Unit,
+    onSearchButtonClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
@@ -88,6 +89,11 @@ internal fun ProductsScreen(
             Column(modifier = Modifier.animateContentSize()) {
                 CenterAlignedTopAppBar(
                     title = { Text(stringResource(R.string.app_name)) },
+                    navigationIcon = {
+                        IconButton(onClick = { onSearchButtonClick() }) {
+                            Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
+                        }
+                    },
                     actions = {
                         IconButton(onClick = { onCategoryButtonClick(uiState.selectedCategory) }) {
                             Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
@@ -150,7 +156,7 @@ private fun ProductsScreenContent(
             .padding(horizontal = 8.dp)
             .consumeWindowInsets(innerPadding)
     ) {
-        itemsIndexed(products, key = { _, item -> item.id }) { index, item ->
+        itemsIndexed(products, key = { index, _ -> index }) { index, item ->
             ProductCard(productUi = item, onClick = { onItemClick(it) })
             // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
             // занимает адеквантое место. При бОльшем кол-ве, конечноо же, нужно кэшировать и выгружать
@@ -214,7 +220,7 @@ private fun CategoryChip(
                     contentDescription = null,
                     modifier = Modifier.clickable { clearSelectedCategory() }
                 )
-        }
+        },
     )
 }
 
@@ -407,6 +413,7 @@ private fun ProductsScreenSuccessPreview(
             onCategoryButtonClick = {},
             clearSelectedCategory = {},
             onItemClick = {},
+            onSearchButtonClick = {}
         )
     }
 }

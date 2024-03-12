@@ -12,6 +12,7 @@ import javax.inject.Inject
 interface ProductsApi {
     suspend fun loadProducts(page: Int, category: String): ResponseDTO // if page = 1 -> skip = (page - 1) * 20, limit = 20
     suspend fun loadProductById(id: Int): ProductDTO
+    suspend fun searchProducts(query: String, page: Int): ResponseDTO
 }
 
 
@@ -30,6 +31,12 @@ class ProductsApiImpl @Inject constructor(
 
     override suspend fun loadProductById(id: Int): ProductDTO {
         val response = client.get("$baseUrl/$id").bodyAsText()
+        return Json.decodeFromString(response)
+    }
+
+    override suspend fun searchProducts(query: String, page: Int): ResponseDTO {
+        val skip = (page - 1) * 20
+        val response = client.get("$baseUrl/search?q=$query&skip=$skip&limit=20").bodyAsText()
         return Json.decodeFromString(response)
     }
 }
