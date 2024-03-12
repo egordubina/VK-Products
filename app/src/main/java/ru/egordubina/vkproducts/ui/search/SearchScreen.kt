@@ -1,5 +1,6 @@
 package ru.egordubina.vkproducts.ui.search
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -10,14 +11,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
@@ -35,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,12 +46,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import kotlinx.coroutines.launch
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.products.ProductUi
 
@@ -62,11 +62,13 @@ internal fun SearchScreen(
     onBackButtonAction: () -> Unit,
     onSearchButtonClick: (String) -> Unit,
     onSearchItemClick: (Int) -> Unit,
-    loadData: (String, Int) -> Unit
+    loadData: (String, Int) -> Unit,
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     SearchBar(
         tonalElevation = 0.dp,
         query = searchQuery,
@@ -84,7 +86,10 @@ internal fun SearchScreen(
         },
         trailingIcon = {
             AnimatedVisibility(searchQuery.isNotEmpty(), enter = fadeIn(), exit = fadeOut()) {
-                IconButton(onClick = { searchQuery = "" }) {
+                IconButton(onClick = {
+                    searchQuery = ""
+                    keyboardController?.show()
+                }) {
                     Icon(imageVector = Icons.Rounded.Clear, contentDescription = null)
                 }
             }
@@ -112,13 +117,15 @@ internal fun SearchScreen(
                 }
             }
         if (uiState.isError)
-            Text(
-                text = stringResource(id = R.string.label__error),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            )
+            LaunchedEffect(key1 = true) {
+                scope.launch {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.label__error),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
     }
     LaunchedEffect(key1 = true) {
         focusRequester.requestFocus()
