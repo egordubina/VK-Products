@@ -34,6 +34,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ru.egordubina.ui.components.ProductCard
@@ -83,9 +84,9 @@ internal fun SearchScreen(
         if (uiState.products.isNotEmpty())
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(8.dp)
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+                contentPadding = PaddingValues(dimensionResource(id = R.dimen.small_padding))
             ) {
                 itemsIndexed(uiState.products, key = { index, _ -> index }) { index, item ->
                     ProductCard(

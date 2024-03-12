@@ -16,13 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ru.egordubina.ui.R
@@ -60,7 +60,7 @@ fun ProductCard(
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
         )
         Text(
             text = description,
@@ -69,15 +69,15 @@ fun ProductCard(
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-                .padding(bottom = 8.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
+                .padding(bottom = dimensionResource(id = R.dimen.small_padding))
         ) {
             ProductCardRating(rating = rating.toString())
             Text(
@@ -101,7 +101,7 @@ private fun ProductImage(thumbnail: String) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .aspectRatio(1f)
-            .padding(bottom = 8.dp)
+            .padding(bottom = dimensionResource(id = R.dimen.small_padding))
             .fillMaxWidth()
     )
 }
@@ -110,7 +110,7 @@ private fun ProductImage(thumbnail: String) {
 private fun ProductCardRating(rating: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.very_small_padding)),
     ) {
         Icon(
             imageVector = Icons.Rounded.Star,
@@ -132,11 +132,11 @@ private fun ProductCardPrice(
     discountPercentage: Int,
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.very_small_padding)),
         verticalAlignment = Alignment.Bottom,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
     ) {
         Text(
             text = priceWithDiscount,

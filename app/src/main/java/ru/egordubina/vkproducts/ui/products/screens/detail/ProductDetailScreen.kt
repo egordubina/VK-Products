@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -120,7 +121,7 @@ internal fun ProductDetailSuccess(
     modifier: Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding)),
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         if (product.images.isNotEmpty()) {
@@ -138,19 +139,19 @@ internal fun ProductDetailSuccess(
                     modifier = Modifier
                         .aspectRatio(16f / 10f)
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
                         .clip(MaterialTheme.shapes.extraLarge)
                 )
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(
-                    8.dp,
+                    dimensionResource(id = R.dimen.small_padding),
                     Alignment.CenterHorizontally
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(dimensionResource(id = R.dimen.small_padding))
             ) {
                 repeat(product.images.size) {
                     val dotColor by animateColorAsState(
@@ -161,24 +162,24 @@ internal fun ProductDetailSuccess(
                         modifier = Modifier
                             .clip(RoundedCornerShape(50))
                             .background(dotColor)
-                            .size(8.dp)
+                            .size(dimensionResource(id = R.dimen.small_padding))
                     )
                 }
             }
         }
         FlowRow(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
         ) {
             if (product.rating > 0)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.very_small_padding)),
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.small)
                         .background(MaterialTheme.colorScheme.errorContainer)
-                        .padding(4.dp)
+                        .padding(dimensionResource(id = R.dimen.very_small_padding))
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Star,
@@ -202,7 +203,7 @@ internal fun ProductDetailSuccess(
                         .alignByBaseline()
                         .clip(MaterialTheme.shapes.small)
                         .background(MaterialTheme.colorScheme.tertiaryContainer)
-                        .padding(4.dp)
+                        .padding(dimensionResource(id = R.dimen.very_small_padding))
                 )
             if (product.brand.isNotEmpty())
                 Text(
@@ -213,7 +214,7 @@ internal fun ProductDetailSuccess(
                         .alignByBaseline()
                         .clip(MaterialTheme.shapes.small)
                         .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(4.dp)
+                        .padding(dimensionResource(id = R.dimen.very_small_padding))
                 )
             if (product.category.isNotEmpty())
                 if (CategoryType[product.category]?.title != null) {
@@ -225,7 +226,7 @@ internal fun ProductDetailSuccess(
                             .alignByBaseline()
                             .clip(MaterialTheme.shapes.small)
                             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-                            .padding(4.dp)
+                            .padding(dimensionResource(id = R.dimen.very_small_padding))
                     )
                 }
         }
@@ -236,12 +237,12 @@ internal fun ProductDetailSuccess(
                 fontWeight = FontWeight.Bold,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
             )
         Row(
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
         ) {
             if (product.priceWithDiscount.isNotEmpty())
                 Text(
@@ -253,7 +254,7 @@ internal fun ProductDetailSuccess(
                         .alignByBaseline()
                         .clip(MaterialTheme.shapes.medium)
                         .background(MaterialTheme.colorScheme.tertiaryContainer)
-                        .padding(8.dp)
+                        .padding(dimensionResource(id = R.dimen.small_padding))
                 )
             if (product.price.isNotEmpty())
                 Text(
@@ -275,13 +276,13 @@ internal fun ProductDetailSuccess(
                 text = stringResource(id = R.string.label__left_stock, product.stock),
                 color = if (product.stock < 50) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 fontWeight = if (product.stock < 50) FontWeight.Bold else null,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
             )
         if (product.description.isNotEmpty()) {
             var isOpenDescription by rememberSaveable { mutableStateOf(false) }
             ElevatedCard(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = dimensionResource(id = R.dimen.medium_padding))
                     .animateContentSize()
                     .clickable { isOpenDescription = !isOpenDescription }
                     .fillMaxWidth()
@@ -290,7 +291,7 @@ internal fun ProductDetailSuccess(
                     text = product.description,
                     maxLines = if (isOpenDescription) Int.MAX_VALUE else 2,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.medium_padding))
                 )
             }
         }

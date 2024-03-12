@@ -43,6 +43,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -138,11 +139,11 @@ private fun ProductsScreenContent(
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.small_padding)),
         contentPadding = innerPadding,
         modifier = Modifier
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = dimensionResource(id = R.dimen.small_padding))
             .consumeWindowInsets(innerPadding)
     ) {
         itemsIndexed(products, key = { index, _ -> index }) { index, item ->
@@ -178,7 +179,7 @@ private fun QuickActions(
     onCategoryButtonClick: (CategoryType) -> Unit,
 ) {
     LazyRow(
-        contentPadding = PaddingValues(8.dp),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.small_padding)),
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxWidth()

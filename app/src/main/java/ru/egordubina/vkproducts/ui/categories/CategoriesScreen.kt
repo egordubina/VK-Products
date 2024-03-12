@@ -23,12 +23,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import ru.egordubina.vkproducts.R
 import ru.egordubina.ui.theme.VkProductsTheme
+import ru.egordubina.vkproducts.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,9 +52,11 @@ internal fun CategoriesScreen(
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             contentPadding = innerPadding,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.consumeWindowInsets(innerPadding).padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.medium_padding)),
+            modifier = Modifier
+                .consumeWindowInsets(innerPadding)
+                .padding(horizontal = dimensionResource(id = R.dimen.medium_padding)),
         ) {
             items(CategoryType.entries) {
                 CategoryItem(
@@ -80,10 +82,10 @@ private fun CategoryItem(
         overflow = TextOverflow.Ellipsis,
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(dimensionResource(id = R.dimen.medium_padding)))
             .background(if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainer)
             .clickable { onClick(category) }
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.medium_padding))
             .aspectRatio(1f)
     )
 }
