@@ -1,5 +1,6 @@
 package ru.egordubina.vkproducts.ui.products.screens.all
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -126,6 +127,9 @@ internal fun ProductsScreen(
                     if (result == SnackbarResult.ActionPerformed) refreshAction()
                 }
             }
+        BackHandler(uiState.selectedCategory != CategoryType.ALL) {
+            clearSelectedCategory()
+        }
         ProductsScreenContent(
             products = uiState.products,
             innerPadding = innerPadding,

@@ -125,7 +125,7 @@ internal fun ProductDetailScreen(
             }
         ProductDetailSuccess(
             product = uiState.product,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
     }
 }
