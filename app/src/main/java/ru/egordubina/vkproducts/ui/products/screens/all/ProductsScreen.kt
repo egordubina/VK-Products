@@ -7,10 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,9 +21,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -44,29 +40,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import kotlinx.coroutines.launch
+import ru.egordubina.ui.components.ProductCard
+import ru.egordubina.ui.theme.VkProductsTheme
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.ProductUi
 import ru.egordubina.vkproducts.ui.products.utils.CategoriesParameterProvider
-import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
 import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateParameterProvider
 import ru.egordubina.vkproducts.ui.products.utils.ProductsUiStateSuccessParameterProvider
-import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -157,7 +146,18 @@ private fun ProductsScreenContent(
             .consumeWindowInsets(innerPadding)
     ) {
         itemsIndexed(products, key = { index, _ -> index }) { index, item ->
-            ProductCard(productUi = item, onClick = { onItemClick(it) })
+            ProductCard(
+                id = item.id,
+                thumbnail = item.thumbnail,
+                priceWithDiscount = item.priceWithDiscount,
+                price = item.price,
+                discountPercentage = item.discountPercentage,
+                title = item.title,
+                description = item.description,
+                rating = item.rating,
+                stock = item.stock,
+                onClick = { onItemClick(it) },
+            )
             // простенький "пагинатор", который неплохоо справляется со 100 элементами и в ОЗУ
             // занимает адеквантое место. При бОльшем кол-ве, конечноо же, нужно кэшировать и выгружать
             if (index == products.size - 10)
@@ -224,130 +224,6 @@ private fun CategoryChip(
     )
 }
 
-@Composable
-private fun ProductCard(productUi: ProductUi, onClick: (Int) -> Unit) {
-    Card(
-        onClick = { onClick(productUi.id) },
-    ) {
-        ProductImage(thumbnail = productUi.thumbnail)
-        ProductCardPrice(
-            productUi.priceWithDiscount,
-            productUi.price,
-            productUi.discountPercentage
-        )
-        Text(
-            text = productUi.title,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
-        Text(
-            text = productUi.description,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
-                .padding(bottom = 8.dp)
-        ) {
-            ProductCardRating(rating = productUi.rating.toString())
-            Text(
-                text = stringResource(id = R.string.label__left_stock_short, productUi.stock),
-                color = if (productUi.stock < 50) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
-                fontWeight = if (productUi.stock < 50) FontWeight.Bold else null,
-                style = MaterialTheme.typography.labelLarge,
-            )
-        }
-    }
-}
-
-@Composable
-private fun ProductImage(thumbnail: String) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(thumbnail)
-            .crossfade(true)
-            .build(),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(bottom = 8.dp)
-            .fillMaxWidth()
-    )
-}
-
-@Composable
-private fun ProductCardRating(rating: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.Star,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.tertiary,
-        )
-        Text(
-            text = rating,
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.tertiary,
-        )
-    }
-}
-
-@Composable
-private fun ProductCardPrice(
-    priceWithDiscount: String,
-    price: String,
-    discountPercentage: Int,
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.Bottom,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-    ) {
-        Text(
-            text = priceWithDiscount,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier.alignByBaseline()
-        )
-        Text(
-            text = price,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textDecoration = TextDecoration.LineThrough,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.alignByBaseline()
-        )
-        Text(
-            text = "-${discountPercentage}%",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.alignByBaseline()
-        )
-    }
-}
-
 @Preview
 @Composable
 private fun PreviewSuccessScreen(
@@ -360,16 +236,6 @@ private fun PreviewSuccessScreen(
             {},
             {}
         )
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewItemCard(
-    @PreviewParameter(ProductsPreviewParameterProvider::class, limit = 1) product: ProductUi,
-) {
-    VkProductsTheme {
-        ProductCard(product) {}
     }
 }
 

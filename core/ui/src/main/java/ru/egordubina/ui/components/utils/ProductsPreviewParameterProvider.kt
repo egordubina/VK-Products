@@ -1,9 +1,8 @@
-package ru.egordubina.vkproducts.ui.products.utils
+package ru.egordubina.ui.components.utils
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import ru.egordubina.vkproducts.ui.products.ProductUi
 
-internal class ProductsPreviewParameterProvider : PreviewParameterProvider<ProductUi> {
+class ProductsPreviewParameterProvider : PreviewParameterProvider<ProductUi> {
     override val values: Sequence<ProductUi>
         get() = sequenceOf(
             ProductUi(id = 0,
@@ -21,3 +20,18 @@ internal class ProductsPreviewParameterProvider : PreviewParameterProvider<Produ
             ),
         )
 }
+
+data class ProductUi(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val priceWithDiscount: String,
+    val price: String,
+    val discountPercentage: Int,
+    val rating: Float,
+    val stock: Int,
+    val brand: String,
+    val category: String,
+    val thumbnail: String,
+    val images: List<String>,
+)

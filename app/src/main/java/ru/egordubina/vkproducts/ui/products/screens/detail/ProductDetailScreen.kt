@@ -23,8 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIosNew
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
@@ -61,11 +59,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import kotlinx.coroutines.launch
+import ru.egordubina.ui.components.utils.ProductsPreviewParameterProvider
 import ru.egordubina.vkproducts.R
 import ru.egordubina.vkproducts.ui.categories.CategoryType
 import ru.egordubina.vkproducts.ui.products.ProductUi
-import ru.egordubina.vkproducts.ui.products.utils.ProductsPreviewParameterProvider
-import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
+import ru.egordubina.ui.theme.VkProductsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

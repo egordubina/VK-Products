@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.theme
+package ru.egordubina.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

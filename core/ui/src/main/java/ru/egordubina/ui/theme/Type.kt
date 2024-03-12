@@ -1,4 +1,4 @@
-package ru.egordubina.vkproducts.ui.theme
+package ru.egordubina.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

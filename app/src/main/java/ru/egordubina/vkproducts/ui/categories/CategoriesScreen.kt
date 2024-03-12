@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ru.egordubina.vkproducts.R
-import ru.egordubina.vkproducts.ui.theme.VkProductsTheme
+import ru.egordubina.ui.theme.VkProductsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
