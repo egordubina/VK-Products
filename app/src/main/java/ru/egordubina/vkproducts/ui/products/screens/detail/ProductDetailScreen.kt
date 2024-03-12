@@ -90,21 +90,6 @@ internal fun ProductDetailScreen(
                             )
                         }
                     },
-                    actions = {
-                        IconButton(onClick = { }, enabled = false) {
-                            Icon(imageVector = Icons.Rounded.Share, contentDescription = null)
-                        }
-                        IconButton(onClick = {
-                            scope.launch {
-                                snackBarHostState.showSnackbar(message = "The product has been added to favorites")
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.FavoriteBorder,
-                                contentDescription = null
-                            )
-                        }
-                    }
                 )
                 if (uiState.isLoading)
                     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
