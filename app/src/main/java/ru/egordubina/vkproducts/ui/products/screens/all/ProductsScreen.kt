@@ -93,11 +93,6 @@ internal fun ProductsScreen(
                             Icon(imageVector = Icons.Rounded.Tune, contentDescription = null)
                         }
                     },
-                    navigationIcon = {
-                        IconButton(onClick = { }) {
-                            Icon(imageVector = Icons.Rounded.Search, contentDescription = null)
-                        }
-                    },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(scrolledContainerColor = MaterialTheme.colorScheme.background),
                     scrollBehavior = scrollAppBarBehavior,
                 )
