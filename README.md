@@ -7,8 +7,9 @@
 - Jetpack Navigation
 - Ktor
 - KotlinX Serialization
-- Room
+- Hilt
 - Coil
 
 ## Краткий обзор
+Главный экран
 
